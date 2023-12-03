@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:assignment/Util/colors.dart';
 import 'package:assignment/Util/dimensions.dart';
 import 'package:flutter/material.dart';
@@ -174,8 +176,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget grid1() {
+    double containerHeight = 450;
+    if (Dimensions.responsiveHeight(450) > Dimensions.screenWidth)
+      containerHeight = Dimensions.screenWidth;
+
+    double gridHeight = (containerHeight - Dimensions.responsiveHeight(50)) / 2;
+    double gridWidth =
+        (Dimensions.screenWidth - Dimensions.responsiveWidth(50));
+
     return Container(
-      height: Dimensions.responsiveHeight(450),
+      height: min(Dimensions.responsiveHeight(450), Dimensions.screenWidth),
       padding: EdgeInsets.symmetric(
         vertical: Dimensions.responsiveHeight(20),
         horizontal: Dimensions.responsiveWidth(20),
@@ -184,7 +194,31 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(Dimensions.responsiveWidth(20)),
         color: Colors.white,
       ),
-      child: gridCreate(AppColors.greenishColor, AppColors.lightBeigeColor),
+      child: Align(
+        alignment: Alignment.center,
+        child: GridView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: Dimensions.responsiveHeight(10),
+            mainAxisSpacing: Dimensions.responsiveWidth(10),
+          ),
+          itemCount: 6,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              height: gridHeight,
+              width: gridWidth,
+              decoration: BoxDecoration(
+                color: AppColors.creamColor,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(Dimensions.responsiveWidth(5)),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -239,7 +273,6 @@ class _HomePageState extends State<HomePage> {
 
   Container gridView() {
     return Container(
-      height: Dimensions.responsiveHeight(400),
       child: Column(children: [
         headingRow("Health Checkups", "View all"),
         gridCreate(Colors.white, Colors.blueGrey),
