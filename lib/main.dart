@@ -20,7 +20,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,7 +64,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    print("${Dimensions.screenHeight} , ${Dimensions.screenWidth}");
+    // print("${Dimensions.screenHeight} , ${Dimensions.screenWidth}");
     return Scaffold(
       backgroundColor: AppColors.creamColor,
       body: Stack(
@@ -105,12 +104,11 @@ class _HomePageState extends State<HomePage> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, item) => Container(
                           margin: EdgeInsets.only(right: 20),
-                          width: Dimensions.responsiveWidth(120),
-                          height: Dimensions.responsiveHeight(100),
+                          width: Dimensions.responsiveWidth(180),
                           decoration: BoxDecoration(
-                            color: Colors.red,
                             borderRadius: BorderRadius.circular(10.0),
                           ),
+                          child: imageAndTextTileList(),
                         ),
                         shrinkWrap: true,
                       ),
@@ -130,12 +128,11 @@ class _HomePageState extends State<HomePage> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, item) => Container(
                           margin: EdgeInsets.only(right: 20),
-                          width: Dimensions.responsiveWidth(120),
-                          height: Dimensions.responsiveHeight(100),
+                          width: Dimensions.responsiveWidth(180),
                           decoration: BoxDecoration(
-                            color: Colors.red,
                             borderRadius: BorderRadius.circular(10.0),
                           ),
+                          child: imageAndTextTileList(),
                         ),
                         shrinkWrap: true,
                       ),
@@ -154,12 +151,11 @@ class _HomePageState extends State<HomePage> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, item) => Container(
                         margin: EdgeInsets.only(right: 20),
-                        width: Dimensions.responsiveWidth(120),
-                        height: Dimensions.responsiveHeight(100),
+                        width: Dimensions.responsiveWidth(180),
                         decoration: BoxDecoration(
-                          color: Colors.red,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
+                        child: imageAndTextTileList(),
                       ),
                       shrinkWrap: true,
                       addAutomaticKeepAlives: true,
@@ -175,17 +171,52 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Column imageAndTextTileList() {
+    return Column(
+      children: [
+        Container(
+          height: Dimensions.responsiveHeight(120),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(Dimensions.responsiveHeight(10)),
+              topRight: Radius.circular(Dimensions.responsiveWidth(10)),
+            ),
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                    "https://m.media-amazon.com/images/I/91XIk-HFwiS._SL1500_.jpg")),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            // height: Dimensions.responsiveHeight(60),
+            width: Dimensions.responsiveWidth(180),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(Dimensions.responsiveHeight(10)),
+                bottomRight: Radius.circular(Dimensions.responsiveWidth(10)),
+              ),
+            ),
+            child: Center(child: largeText("image")),
+          ),
+        )
+      ],
+    );
+  }
+
   Widget grid1() {
     double containerHeight = 450;
-    if (Dimensions.responsiveHeight(450) > Dimensions.screenWidth)
+    if (Dimensions.responsiveHeight(450) > Dimensions.screenWidth) {
       containerHeight = Dimensions.screenWidth;
+    }
 
     double gridHeight = (containerHeight - Dimensions.responsiveHeight(50)) / 2;
     double gridWidth =
         (Dimensions.screenWidth - Dimensions.responsiveWidth(50));
 
     return Container(
-      height: min(Dimensions.responsiveHeight(450), Dimensions.screenWidth),
+      height: min(Dimensions.responsiveHeight(400), Dimensions.screenWidth),
       padding: EdgeInsets.symmetric(
         vertical: Dimensions.responsiveHeight(20),
         horizontal: Dimensions.responsiveWidth(20),
@@ -194,31 +225,40 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(Dimensions.responsiveWidth(20)),
         color: Colors.white,
       ),
-      child: Align(
-        alignment: Alignment.center,
-        child: GridView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: Dimensions.responsiveHeight(10),
-            mainAxisSpacing: Dimensions.responsiveWidth(10),
-          ),
-          itemCount: 6,
-          shrinkWrap: true,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              height: gridHeight,
-              width: gridWidth,
-              decoration: BoxDecoration(
-                color: AppColors.creamColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(Dimensions.responsiveWidth(5)),
-                ),
-              ),
-            );
-          },
+      child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: Dimensions.responsiveHeight(10),
+          mainAxisSpacing: Dimensions.responsiveWidth(10),
         ),
+        itemCount: 6,
+        // shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            decoration: BoxDecoration(
+              color: AppColors.creamColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(Dimensions.responsiveWidth(5)),
+              ),
+            ),
+            child: gridTileView(),
+          );
+        },
       ),
+    );
+  }
+
+  Column gridTileView() {
+    return Column(
+      children: [
+        Image.network(
+            fit: BoxFit.cover,
+            "https://m.media-amazon.com/images/I/91XIk-HFwiS._SL1500_.jpg"),
+        Container(
+          child: Align(alignment: Alignment.center, child: largeText("Grid")),
+        )
+      ],
     );
   }
 
@@ -287,7 +327,7 @@ class _HomePageState extends State<HomePage> {
           headingRow("Top Donor", "View all"),
           textButtonRow("Country", "Local", "Recent"),
           Container(
-            height: Dimensions.responsiveHeight(200),
+            height: Dimensions.responsiveHeight(210),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -580,6 +620,7 @@ class _HomePageState extends State<HomePage> {
               Radius.circular(Dimensions.responsiveWidth(5)),
             ),
           ),
+          child: gridTileView(),
         );
       },
     );
